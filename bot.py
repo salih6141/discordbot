@@ -1,12 +1,12 @@
 import discord
 from discord.ext import commands
-from discord import FFmpegPCMAudio, channel
 import pymongo
-from discord.ext.commands import bot
+from discord.ext.commands import Bot
 from pymongo import MongoClient
 from urllib.parse import quote_plus
 import re
 import config
+
 
 username = config.username
 password = config.password
@@ -21,26 +21,18 @@ print('connection has been made to {collection}', db)
 collection = db["Donut"]
 
 
-async def send_message(message, user_message, is_private):
-    try:
-        response = responses.handle_response(user_message)
-        await message.author.send(response) if is_private else await message.channel.send(response)
-    except Exception as e:
-        print(e)
-
-
 def run_discord_bot():
     TOKEN = config.tokenkey
-    intents = discord.Intents.all()
+    intents = discord.Intents.default()
     intents.message_content = True
-    client = discord.Client(intents=intents)
+    bot = commands.Bot(command_prefix="?", intents=intents)
 
-    @client.event
+    @bot.event
     async def on_ready():
-        print(f'{client.user} is now running!')
-        await client.change_presence(activity=discord.Game('.help | bishes'))
+        print(f'{bot.user} is now running!')
+        await bot.change_presence(activity=discord.Game('.help | bishes'))
 
-    @client.event
+    @bot.event
     async def on_message(message):
         # this code allows for specific users (redstone-torch, Powered-Rail) to add a donut by tagging another user
         if message.content.startswith(
@@ -57,13 +49,13 @@ def run_discord_bot():
                 await message.channel.send(f'```This user has not yet been added to the database.```')
         if message.content.startswith(
                 '.he is a donut') and message.author.id != 308367178715889664 or message.content.startswith(
-                '.he is a donut') and message.author.id == 364456382185078806:
+            '.he is a donut') and message.author.id == 364456382185078806:
             await message.channel.send(f'YOU DO NOT HAVE THE PRIVILIGE. also you a snitch')
         # end section
 
         # this section takes care of the aceCounter and also the restriction on user giving themselves an ace
         if message.content.startswith('.') and message.content.endswith('got an ace') and message.mentions[
-                0].id != message.author.id:
+            0].id != message.author.id:
             query = {'id': f"{message.mentions[0].id}"}
             f = collection.find_one(query)
             if f:
@@ -75,7 +67,7 @@ def run_discord_bot():
                 await message.channel.send(f'```This user has not yet been added to the database.```')
 
         if message.content.startswith('.') and message.content.endswith('got an ace') and message.mentions[
-                0].id == message.author.id:
+            0].id == message.author.id:
             await message.channel.send(f'```Users are NOT allowed to give an ace to themselves. It must be given by '
                                        f'another user that was present during the ace!```')
         # end section
@@ -123,7 +115,7 @@ def run_discord_bot():
                 await message.channel.send("you are already registered in the database.")
             else:
                 entry = {"id": f"{message.author.id}", "username": f"{message.author}", "donutCounter": 0,
-                         "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0}
+                         "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
                 collection.insert_one(entry)
                 await message.channel.send(f"you have been added to the database of donuts.")
         elif message.content.startswith('.add') and not message.content.endswith('.add me'):
@@ -139,7 +131,9 @@ def run_discord_bot():
             sub_end = "'user"
             f = re.sub(r'{}.*?{}'.format(re.escape(sub_start), re.escape(sub_end)), '', str(d))
             x = f.replace("'", "")
-            await message.channel.send(f"```here is your database info => {x}```")
+            g = x.replace(",", "\n")
+            n = g.replace("}", "")
+            await message.channel.send(f"```{g}```")
 
         if message.content.startswith('.show') and message.content.endswith('log'):
             query = {'id': f"{message.mentions[0].id}"}
@@ -148,7 +142,9 @@ def run_discord_bot():
             sub_end = "'user"
             f = re.sub(r'{}.*?{}'.format(re.escape(sub_start), re.escape(sub_end)), '', str(d))
             x = f.replace("'", "")
-            await message.channel.send(f"```here is the database info of {message.mentions[0]} => {x}```")
+            g = x.replace(",", "\n")
+            n = g.replace("}", "")
+            await message.channel.send(f"```{n}```")
         # end section
 
         if message.content.startswith('.help'):
@@ -162,5 +158,45 @@ def run_discord_bot():
                                        '6. To view your counter use the command ".log"\n'
                                        '7. To view another users logs use the command ".show <tag user> log"\n'
                                        'NOTE : all commands are lowercase!```')
+        await bot.process_commands(message)
 
-    client.run(TOKEN)
+    @bot.command()
+    async def add_me(ctx):
+            query = {'id': f"{ctx.author.id}"}
+            d = collection.find_one(query)
+            if d:
+                await ctx.send("```you are already registered in the database.```")
+            else:
+                entry = {"id": f"{ctx.author.id}", "username": f"{ctx.author}", "donutCounter": 0,
+                         "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
+                collection.insert_one(entry)
+                await ctx.send("```you have been added to the database!```")
+
+    @bot.command()
+    async def show_log(ctx):
+        if ctx.message.mentions:
+            query = {'id': f"{ctx.message.mentions[0].id}"}
+            d = collection.find_one(query)
+            sub_start = "{'_id'"
+            sub_end = "'user"
+            f = re.sub(r'{}.*?{}'.format(re.escape(sub_start), re.escape(sub_end)), '', str(d))
+            x = f.replace("'", "")
+            g = x.replace(",", "\n")
+            n = g.replace("}", "")
+            await ctx.send(f"```{n}```")
+        else:
+            await ctx.send(f"```You must mention another user!```")
+
+    @bot.command()
+    async def log(ctx):
+        query = {'id': f"{ctx.author.id}"}
+        d = collection.find_one(query)
+        sub_start = "{'_id'"
+        sub_end = "'user"
+        f = re.sub(r'{}.*?{}'.format(re.escape(sub_start), re.escape(sub_end)), '', str(d))
+        x = f.replace("'", "")
+        g = x.replace(",", "\n")
+        n = g.replace("}", "")
+        await ctx.send(f"```{n}```")
+
+    bot.run(TOKEN)
