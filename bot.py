@@ -133,7 +133,7 @@ def run_discord_bot():
             x = f.replace("'", "")
             g = x.replace(",", "\n")
             n = g.replace("}", "")
-            await message.channel.send(f"```{g}```")
+            await message.channel.send(f"```{n}```")
 
         if message.content.startswith('.show') and message.content.endswith('log'):
             query = {'id': f"{message.mentions[0].id}"}
