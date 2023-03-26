@@ -198,5 +198,28 @@ def run_discord_bot():
         g = x.replace(",", "\n")
         n = g.replace("}", "")
         await ctx.send(f"```{n}```")
+    @bot.command()
+    async def retract(ctx, amount: int , entry:str):
+        if ctx.author.id == 308367178715889664:
+            if ctx.message.mentions:
+                if amount:
+                    if entry:
+                        query = {'id':f"{ctx.message.mentions[0].id}"}
+                        d = collection.find_one(query)
+                        if d:
+                            new_value = {'$inc':{f"{entry}": -amount}}
+                            collection.update_one(query,new_value)
+                            await ctx.send(f"```The {entry} for {ctx.message.mentions[0]} has been decreased by -{amount}!```")
+                        else:
+                            await ctx.send(f"```user does not exist in database```")
+                    else:
+                        await ctx.send(f"```You have to provide a field to update```")
+                else:
+                    await ctx.send(f"```you have to give the amount to decrease from the given field```")
+            else:
+                await ctx.send(f"```no user has been mentioned```")
+        else:
+            await ctx.send(f"```only the admin can decrease values```")
+
 
     bot.run(TOKEN)
