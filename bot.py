@@ -284,7 +284,7 @@ def run_discord_bot():
             x = s.replace("'", "")
             g = x.replace(",", "\n")
             n = g.replace("}", "")
-            await ctx.send(f"``{n}``")
+            await ctx.send(f"```{n}```")
 
 
     bot.run(TOKEN)
