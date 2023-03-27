@@ -174,6 +174,17 @@ def run_discord_bot():
                 await ctx.send("```you have been added to the database!```")
 
     @bot.command()
+    async def add_user(ctx):
+        if ctx.author.id == 308367178715889664:
+            query = {'id': f"{ctx.message.mentions[0].id}"}
+            d = collection.find_one(query)
+            # if d:
+            #     await ctx.send("```you are already registered in the database.```")
+            entry = {"id": f"{ctx.message.mentions[0].id}", "username": f"{ctx.author}", "donutCounter": 0,
+                         "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
+            collection.insert_one(entry)
+            await ctx.send("```you have been added to the database!```")
+    @bot.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def show_log(ctx):
         if ctx.message.mentions:
@@ -224,6 +235,56 @@ def run_discord_bot():
                 await ctx.send(f"```no user has been mentioned```")
         else:
             await ctx.send(f"```only the admin can decrease values```")
+
+    @bot.command()
+    async def results(ctx):
+        result = collection.aggregate([
+            {
+                '$addFields': {
+                    'finalpoints': {
+                        '$subtract': [
+                            {
+                                '$sum': [
+                                    {
+                                        '$multiply': [
+                                            '$bitchCounter', 2
+                                        ]
+                                    }, {
+                                        '$multiply': [
+                                            '$donutCounter', 10
+                                        ]
+                                    }, {
+                                        '$multiply': [
+                                            '$teamkillCounter', 15
+                                        ]
+                                    }
+                                ]
+                            }, {
+                                '$multiply': [
+                                    '$aceCounter', 10
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }, {
+                '$sort': {
+                    'finalpoints': -1
+                }
+            }
+        ])
+        for document in result:
+            l = document
+            sub_start = "{'_id'"
+            sub_end = "'user"
+            f = re.sub(r'{}.*?{}'.format(re.escape(sub_start), re.escape(sub_end)), '', str(l))
+            sub_start2 = "donut"
+            sub_end2 = "final"
+            s = re.sub(r'{}.*?{}'.format(re.escape(sub_start2), re.escape(sub_end2)), '', str(f))
+            x = s.replace("'", "")
+            g = x.replace(",", "\n")
+            n = g.replace("}", "")
+            await ctx.send(f"``{n}``")
 
 
     bot.run(TOKEN)
