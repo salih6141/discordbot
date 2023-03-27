@@ -161,6 +161,7 @@ def run_discord_bot():
         await bot.process_commands(message)
 
     @bot.command()
+    @commands.cooldown(1,10,commands.BucketType.user)
     async def add_me(ctx):
             query = {'id': f"{ctx.author.id}"}
             d = collection.find_one(query)
@@ -173,6 +174,7 @@ def run_discord_bot():
                 await ctx.send("```you have been added to the database!```")
 
     @bot.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def show_log(ctx):
         if ctx.message.mentions:
             query = {'id': f"{ctx.message.mentions[0].id}"}
@@ -188,6 +190,7 @@ def run_discord_bot():
             await ctx.send(f"```You must mention another user!```")
 
     @bot.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def log(ctx):
         query = {'id': f"{ctx.author.id}"}
         d = collection.find_one(query)
@@ -199,6 +202,7 @@ def run_discord_bot():
         n = g.replace("}", "")
         await ctx.send(f"```{n}```")
     @bot.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def retract(ctx, amount: int , entry:str):
         if ctx.author.id == 308367178715889664:
             if ctx.message.mentions:
