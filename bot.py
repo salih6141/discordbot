@@ -172,7 +172,6 @@ def run_discord_bot():
                           '6. To view your counter use the command "?log"\n'
                           '7. To view another users logs use the command "?show_log <tag user>"\n'
                           'NOTE : all commands are lowercase!```')
-
     @bot.command()
     async def i_suck(ctx):
         query = {'id': f"{ctx.author.id}"}
@@ -180,6 +179,39 @@ def run_discord_bot():
         collection.update_one(query, new_value)
         x = collection.find({'id': ctx.author.id})
         await ctx.send(f'```Thank you for informing me that you are a failure.```')
+    @bot.command()
+    async def bitch(ctx, bitch:str):
+        if bitch == ctx.message.mentions[0].id:
+            query = {'id': f"{ctx.message.mentions[0].id}"}
+            f = collection.find_one(query)
+            if f:
+                new_value = {'$inc': {'bitchCounter': 1}}
+                collection.update_one(query, new_value)
+                x = collection.find({'id': ctx.message.author.id})
+                await ctx.send(f'```{ctx.message.mentions[0]} Has been called out for being a BITCH!```')
+            else:
+                await ctx.send(f'```This user has not yet been added to the database.```')
+        else:
+            await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
+    @bot.command()
+    async def ace(ctx, user:str):
+
+    @bot.command()
+    async def teamkill(ctx, teamkiller:str, teamkilled:str):
+        if teamkiller and teamkilled:
+            query = {'id': f"{ctx.message.mentions[0].id}"}
+            f = collection.find_one(query)
+            if f:
+                new_value = {'$inc': {'teamkillCounter': 1}}
+                new_value2 = {'$set': {'teamkilled': f'{ctx.message.mentions[1]}'}}
+                collection.update_one(query, new_value)
+                collection.update_one(query, new_value2)
+                await ctx.send(f'```{ctx.message.mentions[0]} has just teamkilled {ctx.message.mentions[1]}.```')
+            else:
+                await ctx.send(f'```There is something wrong with your command!```')
+        else:
+            await ctx.send("```Your message does not contain the necessary tags => ?help```")
+
     @bot.command()
     @commands.cooldown(1,10,commands.BucketType.user)
     async def add_me(ctx):
