@@ -161,6 +161,26 @@ def run_discord_bot():
         await bot.process_commands(message)
 
     @bot.command()
+    async def help(ctx):
+        await ctx.send('```1. To add yourself to the database use "?add_me"\n'
+                          '2. To add a donut to your counter use the command "?i_suck"\n'
+                          '3. To report someone for being a bitch use command "?bitch <tag user>"\n'
+                          '4. To report a teamkill use the command "?teamkill <tag user that teamkilled> '
+                          '<tag user that got killed>"\n'
+                          '5. To add an ACE to a users counter use the command "?ace <tag user that has '
+                          'aced>"\n'
+                          '6. To view your counter use the command "?log"\n'
+                          '7. To view another users logs use the command "?show_log <tag user>"\n'
+                          'NOTE : all commands are lowercase!```')
+
+    @bot.command()
+    async def i_suck(ctx):
+        query = {'id': f"{ctx.author.id}"}
+        new_value = {'$inc': {'donutCounter': 1}}
+        collection.update_one(query, new_value)
+        x = collection.find({'id': ctx.author.id})
+        await ctx.send(f'```Thank you for informing me that you are a failure.```')
+    @bot.command()
     @commands.cooldown(1,10,commands.BucketType.user)
     async def add_me(ctx):
             query = {'id': f"{ctx.author.id}"}
@@ -176,14 +196,17 @@ def run_discord_bot():
     @bot.command()
     async def add_user(ctx):
         if ctx.author.id == 308367178715889664:
-            query = {'id': f"{ctx.message.mentions[0].id}"}
-            d = collection.find_one(query)
-            # if d:
-            #     await ctx.send("```you are already registered in the database.```")
-            entry = {"id": f"{ctx.message.mentions[0].id}", "username": f"{ctx.author}", "donutCounter": 0,
+            if ctx.message.mentions:
+                query = {'id': f"{ctx.message.mentions[0].id}"}
+                d = collection.find_one(query)
+                if d:
+                    await ctx.send("```you are already registered in the database.```")
+                    entry = {"id": f"{ctx.message.mentions[0].id}", "username": f"{ctx.author}", "donutCounter": 0,
                          "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
-            collection.insert_one(entry)
-            await ctx.send("```you have been added to the database!```")
+                collection.insert_one(entry)
+                await ctx.send("```you have been added to the database!```")
+            else:
+                await ctx.send("```You have to tag a user after the command!")
     @bot.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def show_log(ctx):
