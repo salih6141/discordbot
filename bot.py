@@ -183,8 +183,7 @@ def run_discord_bot():
 
     @bot.command()
     async def bitch(ctx):
-        await ctx.send(f'{bitch} \n {ctx.message.mentions[0]}')
-        if ctx.message == ctx.message.mentions[0]:
+        if ctx.message.mentions:
             query = {'id': f"{ctx.message.mentions[0].id}"}
             f = collection.find_one(query)
             if f:
