@@ -183,21 +183,24 @@ def run_discord_bot():
 
     @bot.command()
     async def bitch(ctx, member: discord.Member):
-        if member:
-            query = {'id': f"{ctx.message.mentions[0].id}"}
-            f = collection.find_one(query)
-            if f:
-                new_value = {'$inc': {'bitchCounter': 1}}
-                collection.update_one(query, new_value)
-                x = collection.find({'id': ctx.message.author.id})
-                await ctx.send(f'```{ctx.message.mentions[0]} Has been called out for being a BITCH!```')
+        try:
+            if member:
+                query = {'id': f"{ctx.message.mentions[0].id}"}
+                f = collection.find_one(query)
+                if f:
+                    new_value = {'$inc': {'bitchCounter': 1}}
+                    collection.update_one(query, new_value)
+                    x = collection.find({'id': ctx.message.author.id})
+                    await ctx.send(f'```{ctx.message.mentions[0]} Has been called out for being a BITCH!```')
+                else:
+                    await ctx.send(f'```This user has not yet been added to the database.```')
             else:
-                await ctx.send(f'```This user has not yet been added to the database.```')
-        else:
-            await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
+                await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
+        except discord.ext.commands.errors.CommandNotFound:
+            await ctx.send("```Your command is not right! refer to ?help_me.```")
 
     @bot.command()
-    async def ace(ctx, user: int):
+    async def ace(ctx, user: discord.Member):
         if ctx.author.id != ctx.message.mentions[0].id:
             query = {'id': f'{ctx.message.mentions[0].id}'}
             f = collection.find_one(query)
