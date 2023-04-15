@@ -182,7 +182,7 @@ def run_discord_bot():
         await ctx.send(f'```Thank you for informing me that you are a failure.```')
 
     @bot.command()
-    async def bitch(ctx, bitch: int):
+    async def bitch(ctx, bitch: str):
         print(bitch)
         if bitch:
             if ctx.message.mentions[0] and ctx.message.mentions[0] == bitch:
