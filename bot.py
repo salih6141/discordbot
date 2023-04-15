@@ -184,7 +184,7 @@ def run_discord_bot():
     @bot.command()
     async def bitch(ctx, bitch: int):
         if bitch:
-            if bitch == ctx.message.mentions[0].id:
+            if ctx.message.mentions[0] and ctx.message.mentions[0] == bitch:
                 query = {'id': f"{ctx.message.mentions[0].id}"}
                 f = collection.find_one(query)
                 if f:
