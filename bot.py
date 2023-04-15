@@ -7,6 +7,7 @@ from urllib.parse import quote_plus
 import re
 import config
 
+
 username = config.username
 password = config.password
 url = "mongodb+srv://<username>:<password>@discordbot.gltp06j.mongodb.net/?retryWrites=true&w=majority"
@@ -174,8 +175,6 @@ def run_discord_bot():
 
     @bot.command()
     async def i_suck(ctx):
-        channel = ctx.author.voice.channel
-        await channel.connect()
         query = {'id': f"{ctx.author.id}"}
         new_value = {'$inc': {'donutCounter': 1}}
         collection.update_one(query, new_value)
