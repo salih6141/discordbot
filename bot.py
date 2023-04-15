@@ -249,10 +249,11 @@ def run_discord_bot():
                 d = collection.find_one(query)
                 if d:
                     await ctx.send("```user already registered in the database.```")
+                else:
                     entry = {"id": f"{ctx.message.mentions[0].id}", "username": f"{ctx.author}", "donutCounter": 0,
-                             "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
-                collection.insert_one(entry)
-                await ctx.send("```user added to the database!```")
+                         "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
+                    collection.insert_one(entry)
+                    await ctx.send("```user added to the database!```")
             else:
                 await ctx.send("```You have to tag a user after the command!")
 
