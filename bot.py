@@ -182,22 +182,25 @@ def run_discord_bot():
         await ctx.send(f'```Thank you for informing me that you are a failure.```')
 
     @bot.command()
-    async def bitch(ctx, bitch: str):
-        if bitch == ctx.message.mentions[0].id:
-            query = {'id': f"{ctx.message.mentions[0].id}"}
-            f = collection.find_one(query)
-            if f:
-                new_value = {'$inc': {'bitchCounter': 1}}
-                collection.update_one(query, new_value)
-                x = collection.find({'id': ctx.message.author.id})
-                await ctx.send(f'```{ctx.message.mentions[0]} Has been called out for being a BITCH!```')
+    async def bitch(ctx, bitch: int):
+        if bitch:
+            if bitch == ctx.message.mentions[0].id:
+                query = {'id': f"{ctx.message.mentions[0].id}"}
+                f = collection.find_one(query)
+                if f:
+                    new_value = {'$inc': {'bitchCounter': 1}}
+                    collection.update_one(query, new_value)
+                    x = collection.find({'id': ctx.message.author.id})
+                    await ctx.send(f'```{ctx.message.mentions[0]} Has been called out for being a BITCH!```')
+                else:
+                    await ctx.send(f'```This user has not yet been added to the database.```')
             else:
-                await ctx.send(f'```This user has not yet been added to the database.```')
+                await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
         else:
-            await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
+            await ctx.send("```You habe to tag a user after ?bitch!")
 
     @bot.command()
-    async def ace(ctx, user: str):
+    async def ace(ctx, user: int):
         if ctx.author.id != ctx.message.mentions[0].id:
             query = {'id': f'{ctx.message.mentions[0].id}'}
             f = collection.find_one(query)
@@ -211,7 +214,7 @@ def run_discord_bot():
             await ctx.send('```A user is not allowed to give themself an ace counter.```')
 
     @bot.command()
-    async def teamkill(ctx, teamkiller: str, teamkilled: str):
+    async def teamkill(ctx, teamkiller: int, teamkilled: int):
         if teamkiller and teamkilled:
             query = {'id': f"{ctx.message.mentions[0].id}"}
             f = collection.find_one(query)
