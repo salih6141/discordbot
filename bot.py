@@ -201,17 +201,20 @@ def run_discord_bot():
 
     @bot.command()
     async def ace(ctx, user: discord.Member):
-        if ctx.author.id != ctx.message.mentions[0].id:
-            query = {'id': f'{ctx.message.mentions[0].id}'}
-            f = collection.find_one(query)
-            if f:
-                new_value = {'$inc': {'aceCounter': 1}}
-                collection.update_one(query, new_value)
-                await ctx.send(f'```{ctx.message.mentions[0]} has aced!!```')
+        if user:
+            if ctx.author.id != ctx.message.mentions[0].id:
+                query = {'id': f'{ctx.message.mentions[0].id}'}
+                f = collection.find_one(query)
+                if f:
+                    new_value = {'$inc': {'aceCounter': 1}}
+                    collection.update_one(query, new_value)
+                    await ctx.send(f'```{ctx.message.mentions[0]} has aced!!```')
+                else:
+                    await ctx.send('```User does not exist in database.```')
             else:
-                await ctx.send('```User does not exist in database.```')
+                await ctx.send('```A user is not allowed to give themself an ace counter.```')
         else:
-            await ctx.send('```A user is not allowed to give themself an ace counter.```')
+            await ctx.send("```You have to tag a user after ?ace```")
 
     @bot.command()
     async def teamkill(ctx, teamkiller: discord.Member, teamkilled: discord.Member):
@@ -244,7 +247,7 @@ def run_discord_bot():
     @bot.command()
     async def add_user(ctx):
         if ctx.author.id == 308367178715889664:
-            if ctx.message.mentions[0].id:
+            if ctx.message.mentions:
                 query = {'id': f"{ctx.message.mentions[0].id}"}
                 d = collection.find_one(query)
                 if d:
