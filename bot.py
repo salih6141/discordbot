@@ -244,15 +244,15 @@ def run_discord_bot():
     @bot.command()
     async def add_user(ctx):
         if ctx.author.id == 308367178715889664:
-            if ctx.message.mentions:
+            if ctx.message.mentions[0].id:
                 query = {'id': f"{ctx.message.mentions[0].id}"}
                 d = collection.find_one(query)
                 if d:
-                    await ctx.send("```you are already registered in the database.```")
+                    await ctx.send("```user already registered in the database.```")
                     entry = {"id": f"{ctx.message.mentions[0].id}", "username": f"{ctx.author}", "donutCounter": 0,
                              "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
                 collection.insert_one(entry)
-                await ctx.send("```you have been added to the database!```")
+                await ctx.send("```user added to the database!```")
             else:
                 await ctx.send("```You have to tag a user after the command!")
 
