@@ -182,23 +182,20 @@ def run_discord_bot():
         await ctx.send(f'```Thank you for informing me that you are a failure.```')
 
     @bot.command()
-    async def bitch(ctx, bitch: discord.member):
-        await ctx.send(bitch + '\n' + ctx.message.mentions[0])
-        if bitch:
-            if ctx.message.mentions[0] and ctx.message.mentions[0] == bitch:
-                query = {'id': f"{ctx.message.mentions[0].id}"}
-                f = collection.find_one(query)
-                if f:
-                    new_value = {'$inc': {'bitchCounter': 1}}
-                    collection.update_one(query, new_value)
-                    x = collection.find({'id': ctx.message.author.id})
-                    await ctx.send(f'```{ctx.message.mentions[0]} Has been called out for being a BITCH!```')
-                else:
-                    await ctx.send(f'```This user has not yet been added to the database.```')
+    async def bitch(ctx):
+        await ctx.send(f'{bitch} \n {ctx.message.mentions[0]}')
+        if ctx.message == ctx.message.mentions[0]:
+            query = {'id': f"{ctx.message.mentions[0].id}"}
+            f = collection.find_one(query)
+            if f:
+                new_value = {'$inc': {'bitchCounter': 1}}
+                collection.update_one(query, new_value)
+                x = collection.find({'id': ctx.message.author.id})
+                await ctx.send(f'```{ctx.message.mentions[0]} Has been called out for being a BITCH!```')
             else:
-                await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
+                await ctx.send(f'```This user has not yet been added to the database.```')
         else:
-            await ctx.send("```You have to tag a user after ?bitch!")
+            await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
 
     @bot.command()
     async def ace(ctx, user: int):
