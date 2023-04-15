@@ -183,6 +183,7 @@ def run_discord_bot():
 
     @bot.command()
     async def bitch(ctx, bitch: int):
+        print(bitch)
         if bitch:
             if ctx.message.mentions[0] and ctx.message.mentions[0] == bitch:
                 query = {'id': f"{ctx.message.mentions[0].id}"}
