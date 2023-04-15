@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from urllib.parse import quote_plus
 import re
 import config
-
+from discord.ext.music import MusicClient, Track, WAVAudio
 
 username = config.username
 password = config.password
@@ -174,6 +174,16 @@ def run_discord_bot():
                        'NOTE : all commands are lowercase!```')
 
     @bot.command()
+    async def play(ctx):
+        voice_user = ctx.message.author.voice
+        music_client = await voice_user.channel.connect(cls=MusicClient)
+        track = Track(
+            WAVAudio('media/audio1.wav'),  # AudioSource
+            'This is audio'  # name
+        )
+        await music_client.play(track)
+
+    @bot.command()
     async def i_suck(ctx):
         query = {'id': f"{ctx.author.id}"}
         new_value = {'$inc': {'donutCounter': 1}}
@@ -253,8 +263,9 @@ def run_discord_bot():
                 if d:
                     await ctx.send("```user already registered in the database.```")
                 else:
-                    entry = {"id": f"{ctx.message.mentions[0].id}", "username": f"{ctx.message.mentions[0]}", "donutCounter": 0,
-                         "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
+                    entry = {"id": f"{ctx.message.mentions[0].id}", "username": f"{ctx.message.mentions[0]}",
+                             "donutCounter": 0,
+                             "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
                     collection.insert_one(entry)
                     await ctx.send("```user added to the database!```")
             else:
