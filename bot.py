@@ -182,8 +182,8 @@ def run_discord_bot():
         await ctx.send(f'```Thank you for informing me that you are a failure.```')
 
     @bot.command()
-    async def bitch(ctx):
-        if ctx.message.mentions:
+    async def bitch(ctx, member: discord.Member):
+        if member:
             query = {'id': f"{ctx.message.mentions[0].id}"}
             f = collection.find_one(query)
             if f:
@@ -211,7 +211,7 @@ def run_discord_bot():
             await ctx.send('```A user is not allowed to give themself an ace counter.```')
 
     @bot.command()
-    async def teamkill(ctx, teamkiller: int, teamkilled: int):
+    async def teamkill(ctx, teamkiller: discord.Member, teamkilled: discord.Member):
         if teamkiller and teamkilled:
             query = {'id': f"{ctx.message.mentions[0].id}"}
             f = collection.find_one(query)
@@ -224,7 +224,7 @@ def run_discord_bot():
             else:
                 await ctx.send(f'```There is something wrong with your command!```')
         else:
-            await ctx.send("```Your message does not contain the necessary tags => ?help```")
+            await ctx.send("```Your message does not contain the necessary tags => ?help_me```")
 
     @bot.command()
     async def add_me(ctx):
@@ -255,8 +255,8 @@ def run_discord_bot():
                 await ctx.send("```You have to tag a user after the command!")
 
     @bot.command()
-    async def show_log(ctx):
-        if ctx.message.mentions:
+    async def show_log(ctx, member: discord.Member):
+        if member:
             query = {'id': f"{ctx.message.mentions[0].id}"}
             d = collection.find_one(query)
             sub_start = "{'_id'"
