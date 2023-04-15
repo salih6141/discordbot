@@ -183,7 +183,7 @@ def run_discord_bot():
 
     @bot.command()
     async def bitch(ctx, bitch: str):
-        print(bitch)
+        await ctx.send(bitch + '\n' + ctx.message.mentions[0])
         if bitch:
             if ctx.message.mentions[0] and ctx.message.mentions[0] == bitch:
                 query = {'id': f"{ctx.message.mentions[0].id}"}
@@ -198,7 +198,7 @@ def run_discord_bot():
             else:
                 await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
         else:
-            await ctx.send("```You habe to tag a user after ?bitch!")
+            await ctx.send("```You have to tag a user after ?bitch!")
 
     @bot.command()
     async def ace(ctx, user: int):
