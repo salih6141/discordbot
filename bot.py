@@ -325,6 +325,7 @@ def run_discord_bot():
     @bot.command()
     async def results(ctx):
         result = collection.aggregate([
+            {'$match': {"guildId": f"{ctx.guild.id}"}},
             {
                 '$addFields': {
                     'finalpoints': {
