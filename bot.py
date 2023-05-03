@@ -163,14 +163,15 @@ def run_discord_bot():
     @bot.command()
     async def help_me(ctx):
         await ctx.send('```1. To add yourself to the database use "?add_me"\n'
-                       '2. To add a donut to your counter use the command "?i_suck"\n'
-                       '3. To report someone for being a bitch use command "?bitch <tag user>"\n'
-                       '4. To report a teamkill use the command "?teamkill <tag user that teamkilled> '
+                       '2. To add a DONUT to your counter use the command "?i_suck"\n'
+                       '3. To report someone for being a BITCH use command "?bitch <tag user>"\n'
+                       '4. To report a TEAMKILL use the command "?teamkill <tag user that teamkilled> '
                        '<tag user that got killed>"\n'
                        '5. To add an ACE to a users counter use the command "?ace <tag user that has '
                        'aced>"\n'
-                       '6. To view your counter use the command "?log"\n'
-                       '7. To view another users logs use the command "?show_log <tag user>"\n'
+                       '6. To VIEW YOUR COUNTER use the command "?log"\n'
+                       '7. To VIEW ANOTHER USERS LOGS use the command "?show_log <tag user>"\n'
+                       '8. To add a CARRY to a user use the command "?carry <tag user>"\n'
                        'NOTE : all commands are lowercase!```')
 
     @bot.command()
@@ -243,6 +244,20 @@ def run_discord_bot():
             await ctx.send("```Your message does not contain the necessary tags => ?help_me```")
 
     @bot.command()
+    async def carry(ctx, carrier: discord.Member):
+        if carrier:
+            query = {'id': f'{ctx.message.mentions[0].id}'}
+            f = collection.find_one(query)
+            if f:
+                new_value = {'$inc': {'carryCounter': 1}}
+                collection.update_one(query, new_value)
+                await ctx.send(f'```{ctx.message.mentions[0]} has carried!```')
+            else:
+                await ctx.send(f'```Tagged user could not be found in database!```')
+        else:
+            await ctx.send(f'```No user has been tagged => "?carry <tag user>".')
+
+    @bot.command()
     async def add_me(ctx):
         query = {'id': f"{ctx.author.id}"}
         d = collection.find_one(query)
@@ -250,7 +265,7 @@ def run_discord_bot():
             await ctx.send("```you are already registered in the database.```")
         else:
             entry = {"id": f"{ctx.author.id}", "username": f"{ctx.author}", "donutCounter": 0,
-                     "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
+                     "bitchCounter": 0, "carryCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
             collection.insert_one(entry)
             await ctx.send("```you have been added to the database!```")
 
@@ -265,7 +280,7 @@ def run_discord_bot():
                 else:
                     entry = {"id": f"{ctx.message.mentions[0].id}", "username": f"{ctx.message.mentions[0]}",
                              "donutCounter": 0,
-                             "bitchCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None", "guildId": f"{ctx.guild.id}"}
+                             "bitchCounter": 0, "carryCounter": 0 ,"aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None", "guildId": f"{ctx.guild.id}"}
                     collection.insert_one(entry)
                     await ctx.send("```user added to the database!```")
             else:
@@ -346,9 +361,18 @@ def run_discord_bot():
                                         ]
                                     }
                                 ]
-                            }, {
-                                '$multiply': [
-                                    '$aceCounter', 10
+                            },
+                            {
+                                '$sum': [
+                                    {
+                                        '$multiply': [
+                                            '$aceCounter', 10
+                                        ]
+                                    },{
+                                        '$multiply': [
+                                            '$carryCounter', 2
+                                        ]
+                                    }
                                 ]
                             }
                         ]
