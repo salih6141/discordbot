@@ -170,7 +170,7 @@ def run_discord_bot():
                        '5. To add an ACE to a users counter use the command "?ace <tag user that has '
                        'aced>"\n'
                        '6. To VIEW YOUR COUNTER use the command "?log"\n'
-                       '7. To VIEW ANOTHER USERS LOGS use the command "?show_log <tag user>"\n'
+                       '7. To VIEW ANOTHER USERS LOGS use the command "?show <tag user>"\n'
                        '8. To add a CARRY to a user use the command "?carry <tag user>"\n'
                        'NOTE : all commands are lowercase!```')
 
@@ -287,7 +287,7 @@ def run_discord_bot():
                 await ctx.send("```You have to tag a user after the command!")
 
     @bot.command()
-    async def show_log(ctx, member: discord.Member):
+    async def show(ctx, member: discord.Member):
         if member:
             query = {'id': f"{ctx.message.mentions[0].id}"}
             d = collection.find_one(query)
