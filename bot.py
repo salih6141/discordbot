@@ -34,6 +34,8 @@ def run_discord_bot():
 
     @bot.event
     async def on_message(message):
+        if message.content.startswith('?') or message.content.startswith('.'):
+            print(f'{message.content}')
         # this code allows for specific users (redstone-torch, Powered-Rail) to add a donut by tagging another user
         if message.content.startswith(
                 '.he is a donut') and message.author.id == 308367178715889664 or message.content.startswith(
