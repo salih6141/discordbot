@@ -282,7 +282,8 @@ def run_discord_bot():
                 else:
                     entry = {"id": f"{ctx.message.mentions[0].id}", "username": f"{ctx.message.mentions[0]}",
                              "donutCounter": 0,
-                             "bitchCounter": 0, "carryCounter": 0 ,"aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None", "guildId": f"{ctx.guild.id}"}
+                             "bitchCounter": 0, "carryCounter": 0, "aceCounter": 0, "teamkillCounter": 0,
+                             "teamkilled": "None", "guildId": f"{ctx.guild.id}"}
                     collection.insert_one(entry)
                     await ctx.send("```user added to the database!```")
             else:
@@ -370,7 +371,7 @@ def run_discord_bot():
                                         '$multiply': [
                                             '$aceCounter', 10
                                         ]
-                                    },{
+                                    }, {
                                         '$multiply': [
                                             '$carryCounter', 2
                                         ]
