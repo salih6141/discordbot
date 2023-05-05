@@ -387,17 +387,18 @@ def run_discord_bot():
                 }
             }
         ])
-        for document in result:
-            l = document
-            sub_start = "{'_id'"
-            sub_end = "'user"
-            f = re.sub(r'{}.*?{}'.format(re.escape(sub_start), re.escape(sub_end)), '', str(l))
-            sub_start2 = "donut"
-            sub_end2 = "final"
-            s = re.sub(r'{}.*?{}'.format(re.escape(sub_start2), re.escape(sub_end2)), '', str(f))
-            x = s.replace("'", "")
-            g = x.replace(",", "\n")
-            n = g.replace("}", "")
-            await ctx.send(f"```{n}```")
+        await ctx.send(f'{result}')
+        # for document in result:
+        #     l = document
+        #     sub_start = "{'_id'"
+        #     sub_end = "'user"
+        #     f = re.sub(r'{}.*?{}'.format(re.escape(sub_start), re.escape(sub_end)), '', str(l))
+        #     sub_start2 = "donut"
+        #     sub_end2 = "final"
+        #     s = re.sub(r'{}.*?{}'.format(re.escape(sub_start2), re.escape(sub_end2)), '', str(f))
+        #     x = s.replace("'", "")
+        #     g = x.replace(",", "\n")
+        #     n = g.replace("}", "")
+        #     await ctx.send(f"```{n}```")
 
     bot.run(TOKEN)
