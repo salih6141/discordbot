@@ -409,7 +409,7 @@ def run_discord_bot():
             engine='text-davinci-003',
             prompt=message,
             temperature=0.7,
-            max_tokens=50,
+            max_tokens=40000,
             n=1,
             stop=None,
             timeout=15
