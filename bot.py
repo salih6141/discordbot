@@ -168,7 +168,7 @@ def run_discord_bot():
     @bot.command()
     async def help_me(ctx):
         await ctx.send('```1. To add yourself to the database use "?add_me"\n'
-                       '2. To add a DONUT to your counter use the command "?i_suck"\n'
+                       '2. To add a DONUT to your counter use the command "?donut"\n'
                        '3. To report someone for being a BITCH use command "?bitch <tag user>"\n'
                        '4. To report a TEAMKILL use the command "?teamkill <tag user that teamkilled> '
                        '<tag user that got killed>"\n'
@@ -190,7 +190,7 @@ def run_discord_bot():
         await music_client.play(track)
 
     @bot.command()
-    async def i_suck(ctx):
+    async def donut(ctx):
         query = {'id': f"{ctx.author.id}"}
         new_value = {'$inc': {'donutCounter': 1}}
         collection.update_one(query, new_value)
