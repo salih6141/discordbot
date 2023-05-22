@@ -2,15 +2,15 @@ import discord
 from discord.ext import commands
 import pymongo
 import openai
-import random
-from discord.ext.commands import Bot
-from pymongo import MongoClient
-from urllib.parse import quote_plus
 import re
 import config
+import requests
+import time
 from discord.ext.music import MusicClient, Track, WAVAudio
 
 openai.api_key = config.API_KEY
+ENDPOINT_URL = 'https://api.openai.com/v1/chat/completions'
+RATE_LIMIT = 40000
 username = config.username
 password = config.password
 url = "mongodb+srv://<username>:<password>@discordbot.gltp06j.mongodb.net/?retryWrites=true&w=majority"
@@ -409,7 +409,7 @@ def run_discord_bot():
             engine='text-davinci-003',
             prompt=message,
             temperature=0.7,
-            max_tokens=40000,
+            max_tokens=500,
             n=1,
             stop=None,
             timeout=15
