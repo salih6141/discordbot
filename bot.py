@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 import pymongo
+import openai
+import random
 from discord.ext.commands import Bot
 from pymongo import MongoClient
 from urllib.parse import quote_plus
@@ -8,6 +10,7 @@ import re
 import config
 from discord.ext.music import MusicClient, Track, WAVAudio
 
+openai.api_key = config.API_KEY
 username = config.username
 password = config.password
 url = "mongodb+srv://<username>:<password>@discordbot.gltp06j.mongodb.net/?retryWrites=true&w=majority"
@@ -399,5 +402,19 @@ def run_discord_bot():
             g = x.replace(",", "\n")
             n = g.replace("}", "")
             await ctx.send(f"```{n}```")
+
+    @bot.command()
+    async def ai(ctx, *, message):
+        response = openai.Completion.create(
+            engine='text-davinci-003',
+            prompt=message,
+            temperature=0.7,
+            max_tokens=50,
+            n=1,
+            stop=None,
+            timeout=15
+        )
+
+        await ctx.send(response.choices[0].text.strip())
 
     bot.run(TOKEN)
