@@ -3,8 +3,6 @@ from discord.ext import commands
 import pymongo
 import re
 import config
-import requests
-import time
 from discord.ext.music import MusicClient, Track, WAVAudio
 
 
