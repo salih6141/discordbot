@@ -1,15 +1,16 @@
 import discord
 from discord.ext import commands
 import pymongo
-import r6sapi as api
-import asyncio
+import openai
 import re
 import config
+import requests
+import time
 from discord.ext.music import MusicClient, Track, WAVAudio
 
-
-email = config.email
-passwordubi = config.passwordubiapi
+openai.api_key = config.API_KEY
+ENDPOINT_URL = 'https://api.openai.com/v1/chat/completions'
+RATE_LIMIT = 40000
 username = config.username
 password = config.password
 url = "mongodb+srv://<username>:<password>@discordbot.gltp06j.mongodb.net/?retryWrites=true&w=majority"
@@ -403,15 +404,17 @@ def run_discord_bot():
             await ctx.send(f"```{n}```")
 
     @bot.command()
-    async def stats(ctx):
-        async def run():
-            auth = api.Auth(f'{email}', f'{passwordubi}')
+    async def ai(ctx, *, message):
+        response = openai.Completion.create(
+            engine='text-davinci-003',
+            prompt=message,
+            temperature=0.7,
+            max_tokens=500,
+            n=1,
+            stop=None,
+            timeout=15
+        )
 
-            player = await auth.get_player("billy_yoyo", api.Platforms.UPLAY)
-            await ctx.send(f'```{player}```')
-
-            await auth.close()
-
-        asyncio.get_event_loop().run_until_complete(run())
+        await ctx.send(response.choices[0].text.strip())
 
     bot.run(TOKEN)
