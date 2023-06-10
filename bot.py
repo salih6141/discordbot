@@ -404,7 +404,7 @@ def run_discord_bot():
     @bot.command()
     async def stats(ctx):
         async def run():
-            auth = api.Auth("komutsalih@gmail.com", "Stu987511")
+            auth = api.Auth(config.email, config.passwordubiapi)
 
             player = await auth.get_player("billy_yoyo", api.Platforms.UPLAY)
             await ctx.send(f'```{player}```')
