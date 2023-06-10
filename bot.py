@@ -8,7 +8,8 @@ import config
 from discord.ext.music import MusicClient, Track, WAVAudio
 
 
-
+email = config.email
+passwordubi = config.passwordubiapi
 username = config.username
 password = config.password
 url = "mongodb+srv://<username>:<password>@discordbot.gltp06j.mongodb.net/?retryWrites=true&w=majority"
@@ -404,7 +405,7 @@ def run_discord_bot():
     @bot.command()
     async def stats(ctx):
         async def run():
-            auth = api.Auth(config.email, config.passwordubiapi)
+            auth = api.Auth(f'{email}', f'{passwordubi}')
 
             player = await auth.get_player("billy_yoyo", api.Platforms.UPLAY)
             await ctx.send(f'```{player}```')
