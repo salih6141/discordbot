@@ -74,21 +74,21 @@ def run_discord_bot():
 
     @bot.command()
     async def givedonut(ctx, member: discord.Member):
-        await ctx.send("waiting for approval of command. Approve command by writing 'approved'")
-
-        def check(msg):
-            if int(msg.author.id) == int(ctx.author.id) and msg == "approved":
-                return true
-            await ctx.send("I was asking the writer of the command.")
-            return false
-
-        try:
-            msg: Message = await wait_for(
-                bot, "on_message_create", check=check, timeout=15
-            )
-        except asyncio.TimeoutError:
-            return await ctx.send("you did not reply in time!")
-        else:
+        # await ctx.send("waiting for approval of command. Approve command by writing 'approved'")
+        #
+        # def check(msg):
+        #     if int(msg.author.id) == int(ctx.author.id) and msg == "approved":
+        #         return true
+        #     await ctx.send("I was asking the writer of the command.")
+        #     return false
+        #
+        # try:
+        #     msg: Message = await wait_for(
+        #         bot, "on_message_create", check=check, timeout=15
+        #     )
+        # except asyncio.TimeoutError:
+        #     return await ctx.send("you did not reply in time!")
+        # else:
             try:
                 if member:
                     query = {'id': f"{ctx.message.mentions[0].id}"}
