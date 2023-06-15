@@ -75,9 +75,9 @@ def run_discord_bot():
 
     @bot.command()
     async def givedonut(ctx, member: discord.Member):
-        await ctx.send("waiting for approval of command. Approve command by writing ?approved")
-        async def approved(msg):
-            if (msg.author.id) == (ctx.author.id):
+        await ctx.send("waiting for approval of command. Approve command by writing 'approved'")
+        async def check(msg):
+            if (msg.author.id) == (ctx.author.id) and msg == "approved":
                 return true
             await ctx.send("I was asking the writer of the command.")
             return false
