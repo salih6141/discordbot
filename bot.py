@@ -80,7 +80,7 @@ def run_discord_bot():
                     new_value = {'$inc':{'donutCounter':1}}
                     collection.update_one(query, new_value)
                     x = collection.find({'id': ctx.message.mentions[0].id})
-                    await ctx.send(f'```{ctx.message.mentions[0].id} has received a donutCounter from {ctx.message.author.id}!```')
+                    await ctx.send(f'```{ctx.message.mentions[0]} has received a donutCounter from {ctx.message.author}!```')
                 else:
                     await ctx.send(f'```This user has not yet been added to the database.```')
             else:
