@@ -8,7 +8,6 @@ from interactions.ext.wait_for import wait_for, setup
 import asyncio
 from discord.ext.music import MusicClient, Track, WAVAudio
 
-
 username = config.username
 password = config.password
 url = "mongodb+srv://<username>:<password>@discordbot.gltp06j.mongodb.net/?retryWrites=true&w=majority"
@@ -76,11 +75,13 @@ def run_discord_bot():
     @bot.command()
     async def givedonut(ctx, member: discord.Member):
         await ctx.send("waiting for approval of command. Approve command by writing 'approved'")
+
         async def check(msg):
-            if (msg.author.id) == (ctx.author.id) and msg == "approved":
+            if int(msg.author.id) == int(ctx.author.id) and msg == "approved":
                 return true
             await ctx.send("I was asking the writer of the command.")
             return false
+
         try:
             msg: Message = await wait_for(
                 bot, "on_message_create", check=check, timeout=15
@@ -90,13 +91,14 @@ def run_discord_bot():
         else:
             try:
                 if member:
-                    query = {'id':f"{ctx.message.mentions[0].id}"}
+                    query = {'id': f"{ctx.message.mentions[0].id}"}
                     f = collection.find_one(query)
                     if f:
-                        new_value = {'$inc':{'donutCounter':1}}
+                        new_value = {'$inc': {'donutCounter': 1}}
                         collection.update_one(query, new_value)
                         x = collection.find({'id': ctx.message.mentions[0].id})
-                        await ctx.send(f'```{ctx.message.mentions[0]} has received a donutCounter from {ctx.message.author}!```')
+                        await ctx.send(
+                            f'```{ctx.message.mentions[0]} has received a donutCounter from {ctx.message.author}!```')
                     else:
                         await ctx.send(f'```This user has not yet been added to the database.```')
                 else:
