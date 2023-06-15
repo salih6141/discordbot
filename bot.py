@@ -3,6 +3,9 @@ from discord.ext import commands
 import pymongo
 import re
 import config
+from interactions import Client, Message
+from interactions.ext.wait_for import wait_for, setup
+import asyncio
 from discord.ext.music import MusicClient, Track, WAVAudio
 
 
@@ -72,21 +75,34 @@ def run_discord_bot():
 
     @bot.command()
     async def givedonut(ctx, member: discord.Member):
+        await ctx.send("waiting for approval of command. Approve command by writing ?approved")
+        async def approved(msg):
+            if (msg.author.id) == (ctx.author.id):
+                return true
+            await ctx.send("I was asking the writer of the command.")
+            return false
         try:
-            if member:
-                query = {'id':f"{ctx.message.mentions[0].id}"}
-                f = collection.find_one(query)
-                if f:
-                    new_value = {'$inc':{'donutCounter':1}}
-                    collection.update_one(query, new_value)
-                    x = collection.find({'id': ctx.message.mentions[0].id})
-                    await ctx.send(f'```{ctx.message.mentions[0]} has received a donutCounter from {ctx.message.author}!```')
+            msg: Message = await wait_for(
+                bot, "on_message_create", check=check, timeout=15
+            )
+        except asyncio.TimeoutError:
+            return await ctx.send("you did not reply in time!")
+        else:
+            try:
+                if member:
+                    query = {'id':f"{ctx.message.mentions[0].id}"}
+                    f = collection.find_one(query)
+                    if f:
+                        new_value = {'$inc':{'donutCounter':1}}
+                        collection.update_one(query, new_value)
+                        x = collection.find({'id': ctx.message.mentions[0].id})
+                        await ctx.send(f'```{ctx.message.mentions[0]} has received a donutCounter from {ctx.message.author}!```')
+                    else:
+                        await ctx.send(f'```This user has not yet been added to the database.```')
                 else:
-                    await ctx.send(f'```This user has not yet been added to the database.```')
-            else:
-                await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
-        except discord.ext.commands.errors.CommandNotFound:
-            await ctx.send("```Your command is not right! refer to ?help_me.```")
+                    await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
+            except discord.ext.commands.errors.CommandNotFound:
+                await ctx.send("```Your command is not right! refer to ?help_me.```")
 
     @bot.command()
     async def bitch(ctx, member: discord.Member):
