@@ -49,6 +49,7 @@ def run_discord_bot():
                        '6. To VIEW YOUR COUNTER use the command "?log"\n'
                        '7. To VIEW ANOTHER USERS LOGS use the command "?show <tag user>"\n'
                        '8. To add a CARRY to a user use the command "?carry <tag user>"\n'
+                       '9. If you want to give ANOTHER USER A DONUT the command is as follows "?givedonut <taguser>"\n'
                        'NOTE : all commands are lowercase!```')
 
     @bot.command()
@@ -68,6 +69,24 @@ def run_discord_bot():
         collection.update_one(query, new_value)
         x = collection.find({'id': ctx.author.id})
         await ctx.send(f'```Thank you for informing me that you are a failure.```')
+
+    @bot.command()
+    async def givedonut(ctx, member: discord.Member):
+        try:
+            if member:
+                query = {'id':f"{ctx.message.mentions[0].id}"}
+                f = collection.find_one(query)
+                if f:
+                    new_value = {'$inc':{'donutCounter':1}}
+                    collection.update_one(query, new_value)
+                    x = collection.find({'id': ctx.message.mentions[0].id})
+                    await ctx.send(f'```{ctx.message.mentions[0].id} has received a donutCounter from {ctx.message.author.id}!```')
+                else:
+                    await ctx.send(f'```This user has not yet been added to the database.```')
+            else:
+                await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
+        except discord.ext.commands.errors.CommandNotFound:
+            await ctx.send("```Your command is not right! refer to ?help_me.```")
 
     @bot.command()
     async def bitch(ctx, member: discord.Member):
