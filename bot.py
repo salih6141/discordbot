@@ -171,6 +171,31 @@ def run_discord_bot():
             query = {'id': f"{ctx.message.mentions[0].id}"}
             f = collection.find_one(query)
             if f:
+                randomNumb = random.randint(1, 7)
+                if randomNumb == 1:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=teamkill-slaps&limit=1'
+                elif randomNumb == 2:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=teamkill-dissapointment&limit=1'
+                elif randomNumb == 3:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=teamkilleveryone&limit=1'
+                elif randomNumb == 4:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=poop&limit=1'
+                elif randomNumb == 5:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=I-am-blind&limit=1'
+                elif randomNumb == 6:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=friendly-fire&limit=1'
+                elif randomNumb == 7:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=wtf-bruh&limit=1'
+
+                response = requests.get(url)
+                data = json.loads(response.text)
+
+                if len(data['data']) > 0:
+                    gif_url = data['data'][0]['images']['fixed_height']['url']
+                    await ctx.send(gif_url)
+                else:
+                    await ctx.send("No GIFs were found!")
+
                 new_value = {'$inc': {'teamkillCounter': 1}}
                 new_value2 = {'$set': {'teamkilled': f'{ctx.message.mentions[1]}'}}
                 collection.update_one(query, new_value)
