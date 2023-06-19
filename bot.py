@@ -70,10 +70,36 @@ def run_discord_bot():
 
     @bot.command()
     async def donut(ctx):
+        randomNumb = random.randint(0,7)
+
         query = {'id': f"{ctx.author.id}"}
         new_value = {'$inc': {'donutCounter': 1}}
         collection.update_one(query, new_value)
         x = collection.find({'id': ctx.author.id})
+
+        if randomNumb == 1 :
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=ass&limit=1'
+        elif randomNumb == 2:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=you-are-a-bitch&limit=1'
+        elif randomNumb == 3:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=you-suck&limit=1'
+        elif randomNumb == 4:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=poop&limit=1'
+        elif randomNumb == 5:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=I-am-blind&limit=1'
+        elif randomNumb == 6:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=homer-simpson-donut&limit=1'
+
+        response = requests.get(url)
+        data = json.loads(response.text)
+
+        if len(data['data']) > 0:
+            gif_url = data['data'][0]['images']['fixed_height']['url']
+            await ctx.send(gif_url)
+        else:
+            await ctx.send("No GIFs were found!")
+
+
         await ctx.send(f'```Thank you for informing me that you are a failure.```')
 
     @bot.command()
