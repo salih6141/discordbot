@@ -71,7 +71,7 @@ def run_discord_bot():
 
     @bot.command()
     async def donut(ctx):
-        randomNumb = random.randint(1,6)
+        randomNumb = random.randint(1,10)
 
         query = {'id': f"{ctx.author.id}"}
         new_value = {'$inc': {'donutCounter': 1}}
