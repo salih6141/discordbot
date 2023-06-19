@@ -90,6 +90,14 @@ def run_discord_bot():
             url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=I-am-blind&limit=1'
         elif randomNumb == 6:
             url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=homer-simpson-donut&limit=1'
+        elif randomNumb == 7:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=emotional-damage&limit=1'
+        elif randomNumb == 8:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=loser&limit=1'
+        elif randomNumb == 9:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=hiding&limit=1'
+        elif randomNumb == 10:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=i-hope-nobody-saw-that&limit=1'
 
         response = requests.get(url)
         data = json.loads(response.text)
