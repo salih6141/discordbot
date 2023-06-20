@@ -59,15 +59,6 @@ def run_discord_bot():
                        '9. If you want to give ANOTHER USER A DONUT the command is as follows "?givedonut <taguser>"\n'
                        'NOTE : all commands are lowercase!```')
 
-    @bot.command()
-    async def play(ctx):
-        voice_user = ctx.message.author.voice
-        music_client = await voice_user.channel.connect(cls=MusicClient)
-        track = Track(
-            WAVAudio('media/audio1.wav'),  # AudioSource
-            'This is audio'  # name
-        )
-        await music_client.play(track)
 
     @bot.command()
     async def donut(ctx):
@@ -98,6 +89,14 @@ def run_discord_bot():
             url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=hiding&limit=1'
         elif randomNumb == 10:
             url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=i-hope-nobody-saw-that&limit=1'
+        elif randomNumb == 11:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=donut&limit=1'
+        elif randomNumb == 12:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=useless&limit=1'
+        elif randomNumb == 13:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=pathetic&limit=1'
+        elif randomNumb == 14:
+            url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=failure&limit=1'
 
         response = requests.get(url)
         data = json.loads(response.text)
@@ -171,7 +170,7 @@ def run_discord_bot():
             query = {'id': f"{ctx.message.mentions[0].id}"}
             f = collection.find_one(query)
             if f:
-                randomNumb = random.randint(1, 7)
+                randomNumb = random.randint(1, 9)
                 if randomNumb == 1:
                     url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=teamkill-slaps&limit=1'
                 elif randomNumb == 2:
@@ -186,6 +185,10 @@ def run_discord_bot():
                     url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=friendly-fire&limit=1'
                 elif randomNumb == 7:
                     url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=wtf-bruh&limit=1'
+                elif randomNumb == 8:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=falling-down-stairs&limit=1'
+                elif randomNumb == 9:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=suicide&limit=1'
 
                 response = requests.get(url)
                 data = json.loads(response.text)
