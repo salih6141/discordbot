@@ -265,7 +265,8 @@ def run_discord_bot():
             x = f.replace("'", "")
             g = x.replace(",", "\n")
             n = g.replace("}", "")
-            await ctx.send(f"```{n}```")
+            embed = discord.Embed(title=f'{ctx.message.mentions[0]} logs', color=0x0000ff, description=n)
+            await ctx.send(embed=embed)
         else:
             await ctx.send(f"```You must mention another user!```")
 
@@ -280,7 +281,6 @@ def run_discord_bot():
         g = x.replace(",", "\n")
         n = g.replace("}", "")
         embed = discord.Embed(title=f'{ctx.author} logs', color=0x0000ff, description=n)
-
         await ctx.send(embed=embed)
 
     @bot.command()
@@ -365,7 +365,8 @@ def run_discord_bot():
             x = s.replace("'", "")
             g = x.replace(",", "\n")
             n = g.replace("}", "")
-            await ctx.send(f"```{n}```")
+            embed = discord.Embed(title='results', color=0x0000ff, description=n)
+            await ctx.send(embed=embed)
 
     @bot.command()
     async def gif(ctx, q):
