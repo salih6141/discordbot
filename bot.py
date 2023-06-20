@@ -30,6 +30,7 @@ def run_discord_bot():
     intents = discord.Intents.default()
     intents.message_content = True
     bot = commands.Bot(command_prefix="?", intents=intents)
+    bot.remove_command('help')
 
     @bot.event
     async def on_ready():
@@ -44,7 +45,7 @@ def run_discord_bot():
         await bot.process_commands(message)
 
     @bot.command()
-    async def help_me(ctx):
+    async def help(ctx):
         embed = discord.Embed(title="Commands",description="These are the commands for the bot:",color=0xffffff)
         embed.add_field(name="Adding to database",value="To add yourself to the database, type '?add_me'")
         embed.add_field(name="Bitch", value="To declare someone a bitch, type '?bitch <tag user>'")
