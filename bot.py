@@ -129,6 +129,7 @@ def run_discord_bot():
 
     @bot.command()
     async def bitch(ctx, member: discord.Member):
+        randomNumb = random.randint(1, 4)
         try:
             if member:
                 query = {'id': f"{ctx.message.mentions[0].id}"}
