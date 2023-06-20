@@ -367,7 +367,7 @@ def run_discord_bot():
             g = x.replace(",", "\n")
             n = g.replace("}", "")
             number+=1
-            embed = discord.Embed(title='results', color=0x0000ff)
+            embed = discord.Embed(title='results', color=0x4b0082)
             embed.add_field(name=f'#{number}',value=f'{n}')
 
         await ctx.send(embed=embed)
