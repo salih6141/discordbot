@@ -103,7 +103,8 @@ def run_discord_bot():
             gif_url = data['data'][0]['images']['fixed_height']['url']
         else:
             await ctx.send("No GIFs were found!")
-        embed = discord.Embed(title=f'{ctx.author} has received a donut!', description=gif_url)
+        embed = discord.Embed(title=f'{ctx.author} has received a donut!')
+        embed.set_image(url=gif_url)
 
         await ctx.send(embed=embed)
 
