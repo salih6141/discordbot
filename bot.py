@@ -355,6 +355,7 @@ def run_discord_bot():
                 }
             }
         ])
+        embed = discord.Embed(title='results', color=0x4b0082)
         for document in result:
             l = document
             sub_start = "{'_id'"
@@ -367,7 +368,6 @@ def run_discord_bot():
             g = x.replace(",", "\n")
             n = g.replace("}", "")
             number+=1
-            embed = discord.Embed(title='results', color=0x4b0082)
             embed.add_field(name=f'#{number}',value=f'{n}')
 
         await ctx.send(embed=embed)
