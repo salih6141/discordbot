@@ -45,18 +45,17 @@ def run_discord_bot():
 
     @bot.command()
     async def help_me(ctx):
-        await ctx.send('```1. To add yourself to the database use "?add_me"\n'
-                       '2. To add a DONUT to your counter use the command "?donut"\n'
-                       '3. To report someone for being a BITCH use command "?bitch <tag user>"\n'
-                       '4. To report a TEAMKILL use the command "?teamkill <tag user that teamkilled> '
-                       '<tag user that got killed>"\n'
-                       '5. To add an ACE to a users counter use the command "?ace <tag user that has '
-                       'aced>"\n'
-                       '6. To VIEW YOUR COUNTER use the command "?log"\n'
-                       '7. To VIEW ANOTHER USERS LOGS use the command "?show <tag user>"\n'
-                       '8. To add a CARRY to a user use the command "?carry <tag user>"\n'
-                       '9. If you want to give ANOTHER USER A DONUT the command is as follows "?givedonut <taguser>"\n'
-                       'NOTE : all commands are lowercase!```')
+        embed = discord.Embed(title="Commands",description="These are the commands for the bot:",color=0xffffff)
+        embed.add_field(name="Adding to database",value="To add yourself to the database use '?add_me'")
+        embed.add_field(name="Bitch", value="To declare someone a bitch '?bitch <tag user>'")
+        embed.add_field(name="Donut", value="if you achieved a donut use the command '?donut'")
+        embed.add_field(name="Teamkill", value="To report a teamkill use the command '?teamkill <user THAT teamkilled> <user that GOT teamkilled>'")
+        embed.add_field(name="Ace", value="To award an ace to a player use the command '?ace <tag user>'")
+        embed.add_field(name="Carry", value="To add a carry counter use the command '?carry <tag user>'")
+        embed.add_field(name="Log", value="To view your log use the command '?log'")
+        embed.add_field(name="Show", value="To view another users logs, use the command '?show <tag user>'")
+        embed.set_footer(text="All commands are LOWERCASE")
+        await ctx.send(embed=embed)
 
     @bot.command()
     async def donut(ctx):
