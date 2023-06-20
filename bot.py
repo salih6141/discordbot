@@ -9,7 +9,6 @@ import json
 import random
 import requests
 
-
 # api gify
 url = "http://api.giphy.com/v1/gifs/search"
 
@@ -59,17 +58,16 @@ def run_discord_bot():
                        '9. If you want to give ANOTHER USER A DONUT the command is as follows "?givedonut <taguser>"\n'
                        'NOTE : all commands are lowercase!```')
 
-
     @bot.command()
     async def donut(ctx):
-        randomNumb = random.randint(1,10)
+        randomNumb = random.randint(1, 10)
 
         query = {'id': f"{ctx.author.id}"}
         new_value = {'$inc': {'donutCounter': 1}}
         collection.update_one(query, new_value)
         x = collection.find({'id': ctx.author.id})
 
-        if randomNumb == 1 :
+        if randomNumb == 1:
             url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=ass&limit=1'
         elif randomNumb == 2:
             url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=you-are-a-bitch&limit=1'
@@ -103,12 +101,12 @@ def run_discord_bot():
 
         if len(data['data']) > 0:
             gif_url = data['data'][0]['images']['fixed_height']['url']
-            await ctx.send(gif_url)
+            await ctx.send()
         else:
             await ctx.send("No GIFs were found!")
+        embed = discord.Embed(title=f'{ctx.author} has received a donut!', description=gif_url)
 
-
-        await ctx.send(f'```Thank you for informing me that you are a failure.```')
+        await ctx.send(embed=embed)
 
     @bot.command()
     async def givedonut(ctx, member: discord.Member):
@@ -370,7 +368,7 @@ def run_discord_bot():
         response = requests.get(url)
         data = json.loads(response.text)
 
-        if len(data['data']) > 0 :
+        if len(data['data']) > 0:
             gif_url = data['data'][0]['images']['fixed_height']['url']
             await ctx.send(gif_url)
         else:
