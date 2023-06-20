@@ -137,7 +137,28 @@ def run_discord_bot():
                     new_value = {'$inc': {'bitchCounter': 1}}
                     collection.update_one(query, new_value)
                     x = collection.find({'id': ctx.message.author.id})
-                    await ctx.send(f'```{ctx.message.mentions[0]} Has been called out for being a BITCH!```')
+
+                    if randomNumb == 1:
+                        url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=dumbass-bitch&limit=1'
+                    elif randomNumb == 2:
+                        url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=behave-yourself&limit=1'
+                    elif randomNumb == 3:
+                        url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=bitchy&limit=1'
+                    elif randomNumb == 4:
+                        url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=cunt&limit=1'
+
+                    response = requests.get(url)
+                    data = json.loads(response.text)
+
+                    if len(data['data']) > 0:
+                        gif_url = data['data'][0]['images']['fixed_height']['url']
+                    else:
+                        await ctx.send("No GIFs were found!")
+                    embed = discord.Embed(title=f'{ctx.message.mentions[0]} has been called out for being a bitch!', color=0xffd700)
+                    embed.set_image(url=gif_url)
+
+                    await ctx.send(embed=embed)
+
                 else:
                     await ctx.send(f'```This user has not yet been added to the database.```')
             else:
