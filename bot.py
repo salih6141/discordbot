@@ -55,6 +55,8 @@ def run_discord_bot():
         embed.add_field(name="Log", value="To view your log use the command '?log'")
         embed.add_field(name="Show", value="To view another users logs, use the command '?show <tag user>'")
         embed.set_footer(text="All commands are LOWERCASE")
+        embed.set_thumbnail(url="https://natashaskitchen.com/wp-content/uploads/2021/05/Glazed-Donuts-SQ.jpg")
+        embed.set_author(name="DonutBot", icon_url="https://natashaskitchen.com/wp-content/uploads/2021/05/Glazed-Donuts-SQ.jpg")
         await ctx.send(embed=embed)
 
     @bot.command()
