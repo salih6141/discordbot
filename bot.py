@@ -279,7 +279,9 @@ def run_discord_bot():
         x = f.replace("'", "")
         g = x.replace(",", "\n")
         n = g.replace("}", "")
-        await ctx.send(f"```{n}```")
+        embed = discord.Embed(title=f'{ctx.author} logs', color=0x0000ff, description=n)
+
+        await ctx.send(embed=embed)
 
     @bot.command()
     async def retract(ctx, amount: int, entry: str):
