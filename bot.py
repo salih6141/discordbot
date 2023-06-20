@@ -193,7 +193,6 @@ def run_discord_bot():
 
                 if len(data['data']) > 0:
                     gif_url = data['data'][0]['images']['fixed_height']['url']
-                    await ctx.send(gif_url)
                 else:
                     await ctx.send("No GIFs were found!")
 
@@ -201,7 +200,11 @@ def run_discord_bot():
                 new_value2 = {'$set': {'teamkilled': f'{ctx.message.mentions[1]}'}}
                 collection.update_one(query, new_value)
                 collection.update_one(query, new_value2)
-                await ctx.send(f'```{ctx.message.mentions[0]} has just teamkilled {ctx.message.mentions[1]}.```')
+
+                embed = discord.Embed(title=f'{ctx.message.mentions[0]} has teamkilled {ctx.message.mentions[1]}!', color=0xff0000)
+                embed.set_image(url=gif_url)
+
+                await ctx.send(embed=embed)
             else:
                 await ctx.send(f'```There is something wrong with your command!```')
         else:
