@@ -309,6 +309,7 @@ def run_discord_bot():
 
     @bot.command()
     async def results(ctx):
+        number=0;
         result = collection.aggregate([
             {'$match': {"guildId": f"{ctx.guild.id}"}},
             {
@@ -365,8 +366,11 @@ def run_discord_bot():
             x = s.replace("'", "")
             g = x.replace(",", "\n")
             n = g.replace("}", "")
-            embed = discord.Embed(title='results', color=0x0000ff, description=n)
-            await ctx.send(embed=embed)
+            number+=1
+            embed = discord.Embed(title='results', color=0x0000ff)
+            embed.add_field(name=f'#{number}',value=f'{n}')
+
+        await ctx.send(embed=embed)
 
     @bot.command()
     async def gif(ctx, q):
