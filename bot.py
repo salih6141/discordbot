@@ -60,7 +60,7 @@ def run_discord_bot():
 
     @bot.command()
     async def donut(ctx):
-        randomNumb = random.randint(1, 10)
+        randomNumb = random.randint(1, 14)
 
         query = {'id': f"{ctx.author.id}"}
         new_value = {'$inc': {'donutCounter': 1}}
@@ -218,7 +218,26 @@ def run_discord_bot():
             if f:
                 new_value = {'$inc': {'carryCounter': 1}}
                 collection.update_one(query, new_value)
-                await ctx.send(f'```{ctx.message.mentions[0]} has carried!```')
+
+                randomNumb = random.randint(1, 3)
+                if randomNumb == 1:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=carry&limit=1'
+                elif randomNumb == 2:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=heavy-backpack&limit=1'
+                elif randomNumb == 3:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=dancing-soldier&limit=1'
+
+                response = requests.get(url)
+                data = json.loads(response.text)
+
+                if len(data['data']) > 0:
+                    gif_url = data['data'][0]['images']['fixed_height']['url']
+                else:
+                    await ctx.send("No GIFs were found!")
+                embed = discord.Embed(title=f'{ctx.message.mentions[0]} has carried!', color=0xff0000)
+                embed.set_image(url=gif_url)
+
+                await ctx.send(embed=embed)
             else:
                 await ctx.send(f'```Tagged user could not be found in database!```')
         else:
