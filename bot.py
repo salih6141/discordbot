@@ -369,7 +369,7 @@ def run_discord_bot():
             n = g.replace("}", "")
             number+=1
             embed.add_field(name=f'#{number}',value=f'{n}')
-            embed.add_field(name="",value="")
+            embed.add_field(name=chr(173),value=chr(173))
 
         await ctx.send(embed=embed)
 
