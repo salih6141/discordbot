@@ -387,7 +387,7 @@ def run_discord_bot():
             g = x.replace(",", "\n")
             n = g.replace("}", "")
             number+=1
-            embed.add_field(name=f'#{number}',value=f'{n}')
+            embed.add_field(name=f'#{number}',value=f'{n}',inline=False)
 
         await ctx.send(embed=embed)
 
