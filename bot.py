@@ -35,7 +35,7 @@ def run_discord_bot():
     @bot.event
     async def on_ready():
         print(f'{bot.user} is now running!')
-        await bot.change_presence(activity=discord.Game('?help_me | bishes'))
+        await bot.change_presence(activity=discord.Game('?help | bishes'))
 
     @bot.event
     async def on_message(message):
