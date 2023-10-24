@@ -244,13 +244,18 @@ def run_discord_bot():
                 new_value = {'$inc': {'carryCounter': 1}}
                 collection.update_one(query, new_value)
 
-                randomNumb = random.randint(1, 3)
+                randomNumb = random.randint(1, 5)
                 if randomNumb == 1:
                     url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=carry&limit=1'
                 elif randomNumb == 2:
                     url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=heavy-backpack&limit=1'
                 elif randomNumb == 3:
                     url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=dancing-soldier&limit=1'
+                elif randomNumb == 4:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=heavy-load&limit=1'
+                elif randomNumb == 5:
+                    url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=resist-weight-of-the-world&limit=1'
+
 
                 response = requests.get(url)
                 data = json.loads(response.text)
