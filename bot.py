@@ -334,6 +334,8 @@ def run_discord_bot():
 
     @bot.command()
     async def slagroom(ctx, amount: int, entry: str, members: commands.Greedy[discord.Member]):
+        print(members[0].id)
+        print(entry)
         if amount:
             if entry:
                 if entry.startswith('bitch'):
@@ -341,11 +343,35 @@ def run_discord_bot():
                         query = {'id': f"{member.id}"}
                         f = collection.find_one(query)
                         if f:
-                            new_value = {'$inc': {f"bitchCounter": amount}}
+                            new_value = {'$inc': {"bitchCounter": amount}}
                             collection.update_one(query, new_value)
                         else:
                             await ctx.send("User does not exist in database!")
-                    embed = discord.Embed(title=f'all the tagged members have received a bitchCounter', color=0x0000ff, description=n)
+                    embed = discord.Embed(title=f'all the tagged members have received: {amount} bitchCounter', color=0x0000ff)
+                    await ctx.send(embed=embed)
+
+                elif entry.startswith('donut'):
+                    for member in members:
+                        query = {'id': f"{member.id}"}
+                        f = collection.find_one(query)
+                        if f:
+                            new_value = {'$inc': {"donutCounter": amount}}
+                            collection.update_one(query, new_value)
+                        else:
+                            await ctx.send("User does not exist in database!")
+                    embed = discord.Embed(title=f'all the tagged members have received: {amount} donutCounter', color=0x0000ff)
+                    await ctx.send(embed=embed)
+
+                elif entry.startswith('carry'):
+                    for member in members:
+                        query = {'id': f"{member.id}"}
+                        f = collection.find_one(query)
+                        if f:
+                            new_value = {'$inc': {"carryCounter": amount}}
+                            collection.update_one(query, new_value)
+                        else:
+                            await ctx.send("User does not exist in database!")
+                    embed = discord.Embed(title=f'all the tagged members have received: {amount} carryCounter', color=0x0000ff)
                     await ctx.send(embed=embed)
             else:
                 await ctx.send("You have to specify wich counter to add points to!")
