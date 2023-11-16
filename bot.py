@@ -11,7 +11,9 @@ import requests
 
 # api gify
 url = "http://api.giphy.com/v1/gifs/search"
-
+lastCommandAuthor = ""
+fullmessage = ""
+lastCommandContent = None
 username = config.username
 password = config.password
 url = "mongodb+srv://<username>:<password>@discordbot.gltp06j.mongodb.net/?retryWrites=true&w=majority"
@@ -39,10 +41,51 @@ def run_discord_bot():
 
     @bot.event
     async def on_message(message):
-        if message.content.startswith('?') or message.content.startswith('.'):
-            print(f'{message.author}: {message.content}')
-
+        if not message.content.startswith('?reverse'):
+            global lastCommandContent
+            lastCommandContent = message.content
+            lastCommandAuthor = message.author.id
+            print(lastCommandContent)
         await bot.process_commands(message)
+    
+    @bot.command()
+    async def reverse(ctx):
+        print(lastCommandContent)
+        if lastCommandContent.startswith('?bitch '):
+            query = {'id': f"{lastCommandAuthor}"}
+            f = collection.find_one(query)
+            if f:
+                new_value = {'$inc': {'bitchCounter': 2}}
+                collection.update_one(query, new_value)
+                x = collection.find({'id': ctx.message.author.id})
+                embed = discord.Embed(title=f'{lastCommandAuthor} has been called out for wrongfully giving a bitchCounter and reveices 2 bitchCounters!', color=0xffd700)
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send(f'```This user has not yet been added to the database.```')
+        else:
+            await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
+
+    @bot.command()
+    async def triple0(ctx, member:discord.member):
+        try:
+            if member:
+                query = {'id': f"{ctx.message.mentions[0].id}"}
+                f = collection.find_one(query)
+                if f:
+                    new_value = {'$inc': {'triple0': 1}}
+                    collection.update_one(query, new_value)
+                    x = collection.find({'id': ctx.message.author.id})
+                    embed = discord.Embed(title=f'{ctx.message.mentions[0]} has been called out for being a bitch!', color=0xffd700)
+                    await ctx.send(embed=embed)
+                else:
+                    embed = discord.Embed(title='Command has failed!', color=0xffd700)
+                    await ctx.send(embed=embed)
+            else:
+                embed = discord.Embed(title='NO user has been tagged!', color=0xffd700)
+                await ctx.send(embed=embed)
+        except discord.ext.commands.errors.CommandNotFound:
+            await ctx.send("```Your command is not right! refer to ?help_me.```")
+
 
     @bot.command()
     async def help(ctx):
@@ -141,6 +184,7 @@ def run_discord_bot():
                     new_value = {'$inc': {'bitchCounter': 1}}
                     collection.update_one(query, new_value)
                     x = collection.find({'id': ctx.message.author.id})
+                    
 
                     if randomNumb == 1:
                         url = f'https://api.giphy.com/v1/gifs/search?api_key={config.gifytoken}&q=dumbass-bitch&limit=1'
@@ -281,7 +325,7 @@ def run_discord_bot():
             await ctx.send("```you are already registered in the database.```")
         else:
             entry = {"id": f"{ctx.author.id}", "username": f"{ctx.author}", "donutCounter": 0,
-                     "bitchCounter": 0, "carryCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None"}
+                     "bitchCounter": 0, "carryCounter": 0, "aceCounter": 0, "teamkillCounter": 0, "teamkilled": "None","guildId": f"{ctx.guild.id}", "triple0": 0}
             collection.insert_one(entry)
             await ctx.send("```you have been added to the database!```")
 
@@ -297,7 +341,7 @@ def run_discord_bot():
                     entry = {"id": f"{ctx.message.mentions[0].id}", "username": f"{ctx.message.mentions[0]}",
                              "donutCounter": 0,
                              "bitchCounter": 0, "carryCounter": 0, "aceCounter": 0, "teamkillCounter": 0,
-                             "teamkilled": "None", "guildId": f"{ctx.guild.id}"}
+                             "teamkilled": "None", "guildId": f"{ctx.guild.id}", "triple0": 0}
                     collection.insert_one(entry)
                     await ctx.send("```user added to the database!```")
             else:
@@ -391,6 +435,10 @@ def run_discord_bot():
                                     }, {
                                         '$multiply': [
                                             '$carryCounter', 2
+                                        ]
+                                    }, {
+                                        '$multiply': [
+                                            '$triple0', 50
                                         ]
                                     }
                                 ]
