@@ -66,7 +66,7 @@ def run_discord_bot():
             await ctx.send("```You didn't tag a user. \nThe correct command is: ?bitch <@User>.```")
 
     @bot.command()
-    async def triple0(ctx, member:discord.member):
+    async def triple0(ctx, member:discord.Member):
         try:
             if member:
                 query = {'id': f"{ctx.message.mentions[0].id}"}
