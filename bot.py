@@ -86,7 +86,6 @@ def run_discord_bot():
         except discord.ext.commands.errors.CommandNotFound:
             await ctx.send("```Your command is not right! refer to ?help_me.```")
 
-
     @bot.command()
     async def help(ctx):
         embed = discord.Embed(title="Commands",description="These are the commands for the bot:",color=0xffffff)
@@ -98,6 +97,7 @@ def run_discord_bot():
         embed.add_field(name="Carry", value="To add a carry counter, type '?carry <tag user>'")
         embed.add_field(name="Log", value="To view your log use the command '?log'")
         embed.add_field(name="Show", value="To view another users logs, type '?show <tag user>'")
+        embed.add_field(name="triple0", value="To grant a triple0, type '?triple0 <tag user>'")
         embed.add_field(name="Scoreboard", value="To view the scoreboard type '?results'")
         embed.set_footer(text="All commands are LOWERCASE")
         embed.set_thumbnail(url="https://natashaskitchen.com/wp-content/uploads/2021/05/Glazed-Donuts-SQ.jpg")
