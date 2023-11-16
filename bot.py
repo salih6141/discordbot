@@ -75,7 +75,7 @@ def run_discord_bot():
                     new_value = {'$inc': {'triple0': 1}}
                     collection.update_one(query, new_value)
                     x = collection.find({'id': ctx.message.author.id})
-                    embed = discord.Embed(title=f'{ctx.message.mentions[0]} has been called out for being a bitch!', color=0xffd700)
+                    embed = discord.Embed(title=f'{ctx.message.mentions[0]} has done a TRIPLE0!', color=0xffd700)
                     await ctx.send(embed=embed)
                 else:
                     embed = discord.Embed(title='Command has failed!', color=0xffd700)
